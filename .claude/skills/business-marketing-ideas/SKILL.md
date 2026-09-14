@@ -1,5 +1,5 @@
 ---
-name: marketing-business-ideation
+name: business-marketing-ideas
 description: Invent and rank solo UK marketing businesses. Use for ideas, offers, unit economics, beachheads, 90-day paths. Do not use for slogans, AI products, or CRM clones.
 ---
 
