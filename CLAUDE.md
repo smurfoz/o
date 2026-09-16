@@ -20,6 +20,8 @@ reflect actual state, not aspiration.
 - **Site**: single-page webapp (missed-call calculator + booking) —
   published as a Claude Artifact; see chat history for the link, or
   republish from `/tmp` scratch build if the source is needed again.
+- **Brand**: see `context/tradereach-brand.md` for the visual identity
+  (dark terminal-style tokens, monospace throughout).
 - **STATUS**: Pre-launch. 0 clients signed. Founding-rate slots
   remaining: 5/5.
 
