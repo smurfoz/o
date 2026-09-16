@@ -1,66 +1,63 @@
 # TradeReach PPC — Visual Identity
 
-**SETTLED as of 2026-09 — kinetic-dark-portal.** After trying three
-directions (flat monospace terminal → warm charcoal/cream terminal →
-this), the user confirmed "glowing portal" as the one to keep. Don't
-propose or apply a different token set to TradeReach without the user
-explicitly asking to change direction again — a new palette pasted
-without that context should prompt a check, not an automatic rebuild.
+**Reopened 2026-09 — cream/coral light theme.** Supersedes
+kinetic-dark-portal (dark, dual glow blobs) at the user's explicit
+request to change direction again. If a new token set arrives after
+this without saying so, check scope before rebuilding — same rule as
+before, just re-anchored to this version.
 
 Design tokens for anything visual built for TradeReach PPC (webapp,
 reports, future ad creative). No trigger logic — read this whenever
 building something visual for TradeReach.
 
-## Tokens (source of truth)
+## Given tokens (source of truth — Tokens Studio format)
 
 ```json
 {
-  "theme": "kinetic-dark-portal",
-  "color": {
-    "bg-main": "#08080A",
-    "bg-surface": "#121216",
-    "fg-main": "#F3F4F6",
-    "fg-muted": "#8E929E",
-    "brand-accent": "#E06C53",
-    "glow-primary": "rgba(224, 108, 83, 0.15)",
-    "glow-secondary": "rgba(147, 51, 234, 0.1)"
-  },
-  "effects": {
-    "blur-radial": "120px",
-    "transition-kinetic": "cubic-bezier(0.16, 1, 0.3, 1)"
+  "brand-accent-row": {
+    "swatch-01": { "value": "#E06C53", "displayName": "Claude Coral Primary", "contrastRatio": "4.8:1" },
+    "swatch-02": { "value": "#F5E6D3", "displayName": "Claude Cream Background", "contrastRatio": "7.2:1" }
   }
 }
 ```
 
+Only two colors given, one explicitly named "Background" — read as a
+light theme (cream base, coral accent), a reversal from every prior
+dark theme this venture has had.
+
 ## Derived tokens (not given — filled in for a working system)
 
 ```css
---surface-2: #191920;              /* nested panel background */
---line: rgba(243,244,246,.09);     /* hairline borders on dark surfaces */
---accent-strong: #F0876D;          /* accent hover/active state */
---accent-ink: #08080A;             /* text on accent-filled buttons */
---good: #7FBF9E;                   /* status/success, cool-toned to match fg-muted's blue-grey cast */
---radius: 4px;
---pad: 1rem;
---font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* not specified in this token set — carried over, no reason given to change it */
+--bg: #F5E6D3;          /* given — cream background */
+--surface: #FBF4E9;     /* card background, lifted lighter than bg */
+--surface-2: #F0DFC5;   /* nested panel, deeper than bg */
+--fg: #2A1F16;          /* primary text — dark warm brown, not pure black, for contrast on cream */
+--muted: #8A7A6B;       /* secondary text, warm grey-brown */
+--line: #E3D0B4;        /* hairline borders */
+--accent: #E06C53;      /* given — coral */
+--accent-strong: #C85640;/* accent hover, darker (buttons darken on hover on a light ground, unlike the brighten-on-hover pattern used on dark themes) */
+--accent-ink: #FFF8F2;  /* near-white text on coral-filled buttons */
+--good: #6E8F5A;        /* status/success, earthy green to match the warm palette rather than a cool stock green */
+--radius: 4px;          /* carried over from prior themes — not specified, no reason to change it */
+--pad: 1rem;            /* carried over — not specified */
+--font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* carried over — not specified, no reason given to change it */
 ```
 
-## How the effects tokens are used
+## Design note
 
-- **`blur-radial` (120px)**: three large, low-opacity circular blobs
-  (`.glow-orange`, `.glow-purple`, `.glow-orange-2`) positioned behind
-  the content, `filter: blur(120px)`. Orange (`glow-primary`) is the
-  dominant one — appears twice, top-left and bottom — purple
-  (`glow-secondary`) appears once, smaller, as a secondary accent, not
-  equal-weight to orange. Fixed behind content, `pointer-events:none`.
-- **`transition-kinetic`**: applied to button hovers (lift + glow
-  shadow), card hovers (subtle lift), input focus rings, and nav link
-  color changes. Motion is a response to interaction, not ambient
-  animation — `prefers-reduced-motion` disables the blinking cursor and
-  cuts transition durations, nothing else needs to change.
-- Terminal chrome (title bar, status dots) on the calculator card, and
-  `// comment`-style section eyebrows, both carried over from the
-  monospace-terminal lineage this theme descends from.
+No effects tokens (no glow, no easing) came with this set, so the
+glow-blob/kinetic-motion treatment from kinetic-dark-portal was
+dropped rather than carried forward onto a light background it wasn't
+designed for. Kept: monospace type, the terminal-chrome calculator
+card, `// comment`-style section eyebrows, and the blinking cursor —
+all recolored for a light ground, simple color/border transitions on
+hover instead of the lift+glow pattern.
+
+Worth naming for future direction decisions: this warmer, lighter
+palette reads less like a dev-tool and more like an approachable local
+service business — arguably a closer fit for TradeReach's actual
+audience (van-based tradespeople) than the dark terminal themes tried
+before it.
 
 ## Where this is used
 
