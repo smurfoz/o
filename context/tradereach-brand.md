@@ -88,6 +88,34 @@ affected, only the multi-column sections got more breathing room.
 - Focus ring switched from raw `--accent` (2.45:1, fails the 3:1
   non-text minimum) to `--accent-text` (~5:1).
 
+## Bug fix (2026-09, post-audit re-check)
+
+Re-fetched the live artifact and re-checked it line by line against
+`context/frontend-design-rules.md` rather than trusting the last
+publish was correct. Found one real regression: `.field
+input:focus-visible{outline:none;}` is more specific than the page's
+global `input:focus-visible` ring rule, so it silently overrode the
+ring on the calculator's two number inputs — leaving only a 1px
+border-colour change on the wrapper as the sole focus indicator,
+weaker than the ring used on every other control on the page. The
+outline was originally suppressed on the input itself because
+`.input-row` has `overflow:hidden` and would clip a ring drawn on the
+child — but that reasoning never got a replacement on the wrapper.
+Fixed by moving the ring to `.input-row:focus-within` (unclipped,
+visible) instead of just the border-colour change:
+
+```css
+.field .input-row:focus-within{
+  border-color:var(--accent-text);
+  outline:3px solid var(--accent-text);
+  outline-offset:2px;
+}
+```
+
+Also replaced the checklist's decorative checkbox icon's literal
+`16px` with `var(--space-4)` (an exact match already in the scale) —
+a token-scale gap, not a functional bug.
+
 ## Not changed / explicitly out of scope
 
 - Target size: buttons/inputs already exceed the WCAG 2.2 AA 24×24px
