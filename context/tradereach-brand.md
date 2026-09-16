@@ -1,63 +1,69 @@
 # TradeReach PPC — Visual Identity
 
-**Reopened 2026-09 — cream/coral light theme.** Supersedes
-kinetic-dark-portal (dark, dual glow blobs) at the user's explicit
-request to change direction again. If a new token set arrives after
-this without saying so, check scope before rebuilding — same rule as
-before, just re-anchored to this version.
+**Palette settled 2026-09 (cream/coral light theme)** — see color
+tokens below. **Craft elevated 2026-09** on top of that same palette:
+type pairing, a real type scale, a spacing scale, and more disciplined
+accent-color usage. Don't change the hex values below without the user
+explicitly reopening the palette again (same rule as before); the
+elevation pass only touches how the palette is used, not what it is.
 
 Design tokens for anything visual built for TradeReach PPC (webapp,
 reports, future ad creative). No trigger logic — read this whenever
 building something visual for TradeReach.
 
-## Given tokens (source of truth — Tokens Studio format)
-
-```json
-{
-  "brand-accent-row": {
-    "swatch-01": { "value": "#E06C53", "displayName": "Claude Coral Primary", "contrastRatio": "4.8:1" },
-    "swatch-02": { "value": "#F5E6D3", "displayName": "Claude Cream Background", "contrastRatio": "7.2:1" }
-  }
-}
-```
-
-Only two colors given, one explicitly named "Background" — read as a
-light theme (cream base, coral accent), a reversal from every prior
-dark theme this venture has had.
-
-## Derived tokens (not given — filled in for a working system)
+## Color tokens (settled — do not change without explicit request)
 
 ```css
---bg: #F5E6D3;          /* given — cream background */
---surface: #FBF4E9;     /* card background, lifted lighter than bg */
---surface-2: #F0DFC5;   /* nested panel, deeper than bg */
---fg: #2A1F16;          /* primary text — dark warm brown, not pure black, for contrast on cream */
---muted: #8A7A6B;       /* secondary text, warm grey-brown */
---line: #E3D0B4;        /* hairline borders */
---accent: #E06C53;      /* given — coral */
---accent-strong: #C85640;/* accent hover, darker (buttons darken on hover on a light ground, unlike the brighten-on-hover pattern used on dark themes) */
---accent-ink: #FFF8F2;  /* near-white text on coral-filled buttons */
---good: #6E8F5A;        /* status/success, earthy green to match the warm palette rather than a cool stock green */
---radius: 4px;          /* carried over from prior themes — not specified, no reason to change it */
---pad: 1rem;            /* carried over — not specified */
---font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* carried over — not specified, no reason given to change it */
+--bg:#F5E6D3; --surface:#FBF4E9; --surface-2:#F0DFC5;
+--fg:#2A1F16; --muted:#8A7A6B; --line:#E3D0B4;
+--accent:#E06C53; --accent-strong:#C85640; --accent-ink:#FFF8F2;
+--good:#6E8F5A;
 ```
 
-## Design note
+## Typography (elevated — was one monospace face for everything)
 
-No effects tokens (no glow, no easing) came with this set, so the
-glow-blob/kinetic-motion treatment from kinetic-dark-portal was
-dropped rather than carried forward onto a light background it wasn't
-designed for. Kept: monospace type, the terminal-chrome calculator
-card, `// comment`-style section eyebrows, and the blinking cursor —
-all recolored for a light ground, simple color/border transitions on
-hover instead of the lift+glow pattern.
+```css
+--font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif; /* headings, hero, brand mark */
+--font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;            /* paragraphs, nav, buttons */
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* numbers, labels, calculator, docket meta */
+```
 
-Worth naming for future direction decisions: this warmer, lighter
-palette reads less like a dev-tool and more like an approachable local
-service business — arguably a closer fit for TradeReach's actual
-audience (van-based tradespeople) than the dark terminal themes tried
-before it.
+Why a grotesque display face, not a serif: cream background + warm
+terracotta-adjacent accent + serif display is a well-known templated
+AI-design combination. A characterful grotesque sidesteps it while
+keeping the same warm palette. Monospace is demoted from "the only
+typeface" to a deliberate accent reserved for data and technical
+labels (calculator figures, docket meta, section eyebrows) — it now
+means something (precision/measurement) instead of being the default.
+
+## Type scale (elevated — was ad hoc: 10/11/11.5/12.5/13/13.5/14/14.5/15/15.5px...)
+
+```css
+--text-xs: .6875rem;   /* 11px — micro labels, docket meta */
+--text-sm: .8125rem;   /* 13px — nav, secondary body, buttons */
+--text-base: .9375rem; /* 15px — body copy */
+--text-md: 1.0625rem;  /* 17px — lede paragraph */
+--text-lg: 1.25rem;    /* 20px — section h2 */
+--text-xl: 1.75rem;    /* 28px — step/card headings */
+--text-2xl: clamp(2rem, 4.2vw, 2.75rem); /* 32-44px — hero h1 */
+```
+
+## Spacing scale (elevated — was `--pad` × arbitrary factors like 0.65, 1.4, 2.6, 3.2)
+
+```css
+--space-1: .25rem;  --space-2: .5rem;  --space-3: .75rem;
+--space-4: 1rem;    --space-5: 1.5rem; --space-6: 2rem;
+--space-7: 3rem;    --space-8: 4rem;
+```
+
+## Color-usage rule (elevated — was accent on every interactive/decorative mark at once)
+
+Accent (coral) is reserved for: primary buttons, the hero's emphasized
+word, the "hot" calculator readout, the founding-rate price card, the
+live status dot, and focus rings. Checklist checkmarks and other
+minor marks use `--fg` or `--muted` instead of accent, so the accent
+still reads as *the* signal color rather than blending into general
+decoration.
 
 ## Where this is used
 
