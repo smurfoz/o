@@ -4,28 +4,30 @@ Design tokens for anything visual built for TradeReach PPC (webapp,
 reports, future ad creative). No trigger logic — read this whenever
 building something visual for TradeReach.
 
-**Current: "kinetic-dark-portal"** (superseded the flat "cc-" palette
-from 2026-09; that one read as too plain). Dark, layered, with dual
-ambient glow blobs (orange + purple) and motion on interactive
-elements — a modern dev-tool-at-night feel rather than a flat terminal.
+**Current: "claude-code" theme** (superseded "kinetic-dark-portal" from
+2026-09; that one had dual glow blobs and kinetic motion, neither of
+which is part of this token set, so both were dropped rather than
+carried forward). Reads as a vintage amber-terminal / ledger aesthetic:
+warm cream text on charcoal, a single orange accent, strict monospace.
 
-## Given tokens (source of truth)
+## Given tokens (source of truth — W3C design-tokens format)
 
 ```json
 {
-  "theme": "kinetic-dark-portal",
   "color": {
-    "bg-main": "#08080A",
-    "bg-surface": "#121216",
-    "fg-main": "#F3F4F6",
-    "fg-muted": "#8E929E",
-    "brand-accent": "#E06C53",
-    "glow-primary": "rgba(224, 108, 83, 0.15)",
-    "glow-secondary": "rgba(147, 51, 234, 0.1)"
+    "charcoal-900": "#101010",
+    "cream-100": "#F5E6D3",
+    "orange-500": "#E67D22",
+    "tan-500": "#8A847C"
   },
-  "effects": {
-    "blur-radial": "120px",
-    "transition-kinetic": "cubic-bezier(0.16, 1, 0.3, 1)"
+  "semantic": {
+    "bg-canvas": "charcoal-900",
+    "text-primary": "cream-100",
+    "accent-interactive": "orange-500",
+    "text-muted": "tan-500"
+  },
+  "typography": {
+    "font-stack": ["JetBrains Mono", "Fira Code", "ui-monospace", "monospace"]
   }
 }
 ```
@@ -33,30 +35,27 @@ elements — a modern dev-tool-at-night feel rather than a flat terminal.
 ## Derived tokens (not given — filled in for a working system)
 
 ```css
---surface-2: #191920;              /* nested panel background */
---line: rgba(243,244,246,.09);     /* hairline borders on dark surfaces */
---accent-strong: #F0876D;          /* accent hover/active state */
---accent-ink: #08080A;             /* text on accent-filled buttons */
---good: #7FBF9E;                   /* status/success, cool-toned to match fg-muted's blue-grey cast */
---radius: 4px;                     /* carried over from the prior token set */
---pad: 1rem;                       /* carried over from the prior token set */
---font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* carried over — not specified in this token set, no reason given to change it */
+--surface: #181410;      /* card background, warm-lifted off bg-canvas, not neutral grey */
+--surface-2: #1F1911;    /* nested panel background */
+--line: rgba(245,230,211,.10); /* hairline borders, tinted from text-primary rather than a separate grey */
+--accent-strong: #F2954A;/* accent hover — brighter, not darker (matches the pattern used in prior themes) */
+--accent-ink: #101010;   /* text on accent-filled buttons */
+--good: #9CAA6E;         /* status/success — muted olive-green, warm-compatible rather than a stock green */
+--radius: 4px;           /* carried over — not specified, no reason to change it */
+--pad: 1rem;             /* carried over — not specified, no reason to change it */
 ```
 
-## How the effects tokens are used
+## Design direction taken
 
-- **`blur-radial` (120px)**: three large, low-opacity circular blobs
-  (`.glow-orange`, `.glow-purple`, `.glow-orange-2`) positioned behind
-  the content, `filter: blur(120px)`. Orange (`glow-primary`) is the
-  dominant one — appears twice, top-left and bottom — purple
-  (`glow-secondary`) appears once, smaller, as a secondary accent, not
-  equal-weight to orange. Fixed behind content, `pointer-events:none`.
-- **`transition-kinetic`**: applied to button hovers (lift + glow
-  shadow), card hovers (subtle lift), input focus rings, and nav link
-  color changes. Not used for anything that loops or auto-plays —
-  motion is a response to interaction, not ambient animation, so
-  `prefers-reduced-motion` only needs to disable the blinking cursor
-  and cut transition durations, not remove a background animation.
+The token description calls out "horizontal grid alignment" for the
+font choice — read as a cue toward a ledger/ruled-terminal look rather
+than the glow-and-motion treatment of the prior theme: fine horizontal
+rule lines in the background (very low opacity, tan-tinted) instead of
+blurred glow blobs, tabular alignment on the calculator readout and
+pricing figures, no page-load or hover motion beyond simple color/
+border transitions. JetBrains Mono loaded from Google Fonts; Fira
+Code/ui-monospace/monospace stay as unloaded fallbacks per the given
+stack.
 
 ## Where this is used
 
