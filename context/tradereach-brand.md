@@ -29,17 +29,50 @@ lightness. Use `--accent-text` for anything read as text or a small
 meaningful mark; reserve `--accent` for fills large enough to pair
 with a separately-chosen ink color.
 
-## Typography (unchanged from prior elevation pass)
+## Typography and layout tokens (realigned 2026-09 to `context/frontend-design-rules.md`)
+
+Font families unchanged (Bricolage Grotesque display / Public Sans
+body / monospace for data), but font weights trimmed to the two-per-
+family limit: Bricolage now loads as a single static 700 weight (only
+weight actually used), Public Sans loads 400+700 (was 400/500/700).
 
 ```css
 --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
 --font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;
 --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+--text-xs: .75rem;    /* 12px — the absolute floor, was 11px in places */
+--text-sm: .875rem;   /* 14px — secondary labels only */
+--text-base: 1rem;    /* 16px — body floor, was 15px */
+--text-lg: 1.25rem;   /* 20px */
+--text-xl: 1.5625rem; /* 25px */
+--text-2xl: 1.953rem; /* 31.25px */
+--text-3xl: 2.441rem; /* 39px */
+--text-4xl: 3.052rem; /* 48.8px */
+
+--space-1: .25rem; --space-2: .5rem;  --space-3: .75rem; --space-4: 1rem;
+--space-6: 1.5rem; --space-8: 2rem;   --space-12: 3rem;  --space-16: 4rem;
+
+--radius: .5rem; /* was 4px */
+--transition-fast: .15s ease; --transition-mid: .3s ease;
 ```
 
-Type scale and spacing scale also unchanged (see prior entries in git
-history) — this pass only touched color usage and semantics, not
-sizing.
+Renamed to match the standard scale exactly (previous names like
+`--space-5`/`--space-7` didn't line up with the px-based numbering
+convention). Body text and the smallest label size were both below the
+new rules' floors (15px/11px) and are now at the 16px/12px minimums.
+
+## Layout: mobile-first (rebuilt 2026-09)
+
+Was desktop-first (base styles assumed multi-column, `max-width`
+media queries collapsed to mobile) — rebuilt so base styles are the
+single-column mobile case and `min-width` queries add columns.
+Checklist, steps, pricing and the booking grid now use
+`grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` instead
+of hardcoded per-breakpoint column counts, per the rules' explicit
+preference. Container widened from 960px to the rules' 1280px — body
+text keeps its own `max-width: 65ch` regardless, so line length isn't
+affected, only the multi-column sections got more breathing room.
 
 ## Semantic/accessibility fixes applied this pass
 
@@ -65,6 +98,18 @@ sizing.
   state) — add accessible error summary + `aria-invalid`/
   `aria-describedby` if a real booking form replaces the
   WhatsApp/email links later.
+- Font self-hosting: `context/frontend-design-rules.md` calls for
+  self-hosted `.woff2` with preload, but the Artifact platform's CSP
+  only permits font *stylesheets* from `fonts.googleapis.com` — see
+  that file's platform note. Used Google Fonts + `font-display: swap`
+  + minimum weights as the closest compliant equivalent.
+- Dark mode: the rules ask for a `prefers-color-scheme: dark` variant
+  under the same token names. Not added — this palette's exact hex
+  values came from the user as a deliberate single (light) theme
+  commitment, and inventing dark-mode colours not requested by them
+  would contradict the "don't change settled colours without asking"
+  rule already in place above. Flagging rather than assuming; ask if
+  a dark variant is wanted.
 
 ## Where this is used
 

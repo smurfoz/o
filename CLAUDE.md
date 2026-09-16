@@ -21,7 +21,7 @@ reflect actual state, not aspiration.
   published as a Claude Artifact; see chat history for the link, or
   republish from `/tmp` scratch build if the source is needed again.
 - **Brand**: see `context/tradereach-brand.md` for the visual identity
-  (dark terminal-style tokens, monospace throughout).
+  (cream/coral light theme, accessibility-audited).
 - **STATUS**: Pre-launch. 0 clients signed. Founding-rate slots
   remaining: 5/5.
 
@@ -59,3 +59,7 @@ reflect actual state, not aspiration.
   *new* solo UK marketing business ideas. Not for running these two.
 - `.claude/skills/business-ops/` — the operating playbook for these two
   ventures (onboarding, reporting, pricing/capacity, renewals).
+- `context/frontend-design-rules.md` — standing rules for all HTML/CSS/
+  component work in this repo (tokens, contrast, focus, semantics,
+  mobile-first layout, performance, states). Apply to every page, not
+  just TradeReach's.
