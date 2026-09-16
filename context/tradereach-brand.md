@@ -1,69 +1,70 @@
 # TradeReach PPC — Visual Identity
 
-**Palette settled 2026-09 (cream/coral light theme)** — see color
-tokens below. **Craft elevated 2026-09** on top of that same palette:
-type pairing, a real type scale, a spacing scale, and more disciplined
-accent-color usage. Don't change the hex values below without the user
-explicitly reopening the palette again (same rule as before); the
-elevation pass only touches how the palette is used, not what it is.
+**Palette settled 2026-09 (cream/coral light theme)** — hex values
+below are fixed; don't change them without the user explicitly
+reopening the palette. **Accessibility-audited 2026-09** against a
+user-supplied web design framework (WCAG 2.x contrast rules, semantic
+HTML, target size) — several real contrast failures were found and
+fixed; this section is the record of what changed and why.
 
-Design tokens for anything visual built for TradeReach PPC (webapp,
-reports, future ad creative). No trigger logic — read this whenever
-building something visual for TradeReach.
+## Colour system (audited — computed via WCAG relative luminance)
 
-## Color tokens (settled — do not change without explicit request)
+| Token | Value | Role | Checked against | Ratio | Passes |
+|---|---|---|---|---|---|
+| `--bg` | `#F5E6D3` | Page background | — | — | — |
+| `--surface` | `#FBF4E9` | Card background | — | — | — |
+| `--surface-2` | `#F0DFC5` | Nested panel | — | — | — |
+| `--fg` | `#2A1F16` | Primary text | `--bg` | ~14:1 | Yes (normal text 4.5:1) |
+| `--muted` | `#6B5D4F` | Secondary text | `--bg`/`--surface-2` | ~5.1:1 | Yes — **was `#8A7A6B` at 3.1:1, failed** |
+| `--line` | `#E3D0B4` | Hairline borders | — | decorative, no text | n/a |
+| `--accent` | `#E06C53` | Fill only (buttons, badges, tints) | — | used as background, paired with dark ink text | — |
+| `--accent-text` | `#9C3E2B` | Accent used AS TEXT (links, emphasis, live dot, step numbers, focus ring) | `--bg`/`--surface` | ~5.0:1 | Yes — **raw `--accent` as text was 2.45:1, failed even large-text 3:1** |
+| `--accent-hover` | `#E8836D` | Button hover fill (lighter, not darker — paired with dark ink text) | with `--fg` text | ~6.0:1 | Yes — **darkening on hover as originally built dropped fg-on-fill to 3.7:1, failed** |
+| `--accent-ink` | `= --fg` (`#2A1F16`) | Text on accent/accent-hover fills | `--accent` | ~4.9:1 | Yes — **was near-white at 3.1:1, failed** |
+| `--good` | `#466534` | Status text ("taking new callouts") | `--bg` | ~5.0:1 | Yes — **was `#6E8F5A` at 2.75:1, failed** |
 
-```css
---bg:#F5E6D3; --surface:#FBF4E9; --surface-2:#F0DFC5;
---fg:#2A1F16; --muted:#8A7A6B; --line:#E3D0B4;
---accent:#E06C53; --accent-strong:#C85640; --accent-ink:#FFF8F2;
---good:#6E8F5A;
-```
+**Rule going forward**: never use `--accent` as a foreground/text/icon
+color directly on a light surface — it fails contrast at that
+lightness. Use `--accent-text` for anything read as text or a small
+meaningful mark; reserve `--accent` for fills large enough to pair
+with a separately-chosen ink color.
 
-## Typography (elevated — was one monospace face for everything)
-
-```css
---font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif; /* headings, hero, brand mark */
---font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;            /* paragraphs, nav, buttons */
---font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* numbers, labels, calculator, docket meta */
-```
-
-Why a grotesque display face, not a serif: cream background + warm
-terracotta-adjacent accent + serif display is a well-known templated
-AI-design combination. A characterful grotesque sidesteps it while
-keeping the same warm palette. Monospace is demoted from "the only
-typeface" to a deliberate accent reserved for data and technical
-labels (calculator figures, docket meta, section eyebrows) — it now
-means something (precision/measurement) instead of being the default.
-
-## Type scale (elevated — was ad hoc: 10/11/11.5/12.5/13/13.5/14/14.5/15/15.5px...)
+## Typography (unchanged from prior elevation pass)
 
 ```css
---text-xs: .6875rem;   /* 11px — micro labels, docket meta */
---text-sm: .8125rem;   /* 13px — nav, secondary body, buttons */
---text-base: .9375rem; /* 15px — body copy */
---text-md: 1.0625rem;  /* 17px — lede paragraph */
---text-lg: 1.25rem;    /* 20px — section h2 */
---text-xl: 1.75rem;    /* 28px — step/card headings */
---text-2xl: clamp(2rem, 4.2vw, 2.75rem); /* 32-44px — hero h1 */
+--font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+--font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 ```
 
-## Spacing scale (elevated — was `--pad` × arbitrary factors like 0.65, 1.4, 2.6, 3.2)
+Type scale and spacing scale also unchanged (see prior entries in git
+history) — this pass only touched color usage and semantics, not
+sizing.
 
-```css
---space-1: .25rem;  --space-2: .5rem;  --space-3: .75rem;
---space-4: 1rem;    --space-5: 1.5rem; --space-6: 2rem;
---space-7: 3rem;    --space-8: 4rem;
-```
+## Semantic/accessibility fixes applied this pass
 
-## Color-usage rule (elevated — was accent on every interactive/decorative mark at once)
+- Calculator card title was an `<h3>` appearing directly under the
+  page's only `<h1>` with no intervening `<h2>` — a heading-hierarchy
+  skip. Changed to a non-heading `<p class="slip-title">` since it's a
+  UI panel label, not document structure.
+- Added a skip link (`Skip to main content` → `#main-content`) and
+  `aria-label="Primary navigation"` on the nav landmark.
+- Added `aria-live="polite" aria-atomic="true"` on the calculator's
+  readout — figures update on input without a page reload, and
+  screen-reader users weren't previously told a value had changed.
+- Focus ring switched from raw `--accent` (2.45:1, fails the 3:1
+  non-text minimum) to `--accent-text` (~5:1).
 
-Accent (coral) is reserved for: primary buttons, the hero's emphasized
-word, the "hot" calculator readout, the founding-rate price card, the
-live status dot, and focus rings. Checklist checkmarks and other
-minor marks use `--fg` or `--muted` instead of accent, so the accent
-still reads as *the* signal color rather than blending into general
-decoration.
+## Not changed / explicitly out of scope
+
+- Target size: buttons/inputs already exceed the WCAG 2.2 AA 24×24px
+  minimum; padding nudged slightly toward the 44px usability goal
+  where it cost nothing, not treated as a compliance requirement.
+- No images on this page, so no alt-text audit applies.
+- No form validation exists yet (calculator has no submit/error
+  state) — add accessible error summary + `aria-invalid`/
+  `aria-describedby` if a real booking form replaces the
+  WhatsApp/email links later.
 
 ## Where this is used
 
